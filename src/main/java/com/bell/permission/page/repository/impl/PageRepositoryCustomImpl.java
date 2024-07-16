@@ -22,7 +22,7 @@ public class PageRepositoryCustomImpl implements PageRepositoryCustom {
 
 	@Override
 	public List<PageDto> getPageListByPermissionIdList(List<Long> permissionIdList) {
-		return query.select(Projections.constructor(PageDto.class,
+		return query.selectDistinct(Projections.constructor(PageDto.class,
 				pageEntity.id,
 				pageEntity.path))
 			.from(pageEntity)

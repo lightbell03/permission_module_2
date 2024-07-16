@@ -23,7 +23,7 @@ public class FunctionRepositoryCustomImpl implements FunctionRepositoryCustom {
 
 	@Override
 	public List<FunctionDto> getFunctionListByPermissionIdList(List<Long> permissionIdList) {
-		return query.select(Projections.constructor(FunctionDto.class,
+		return query.selectDistinct(Projections.constructor(FunctionDto.class,
 				functionEntity.id,
 				apiEntity.path,
 				functionEntity.keyword))

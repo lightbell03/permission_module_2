@@ -1,5 +1,14 @@
 package com.bell.permission.user.service.impl;
 
+import com.bell.permission.function.dto.FunctionDto;
+import com.bell.permission.function.service.FunctionService;
+import com.bell.permission.page.dto.PageDto;
+import com.bell.permission.page.service.PageService;
+import com.bell.permission.permissiongroup.service.PermissionGroupService;
+import com.bell.permission.service.dto.ServiceDto;
+import com.bell.permission.user.dto.LoginResponseDto;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +31,10 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final UserPermissionGroupRepository userPermissionGroupRepository;
 
+	private final PermissionGroupService permissionGroupService;
+	private final FunctionService functionService;
+	private final PageService pageService;
+
 	@Override
 	public void createUser(CreateUserDto createUserDto) {
 		UserEntity user = UserEntity.builder()
@@ -42,12 +55,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public PermissionGroupDto getUserPerimssion(Long userId, Long serviceId) {
+	public List<PermissionGroupDto> getUserPermission(Long userId, Long serviceId) {
 		return userRepository.findUserPermissionById(userId, serviceId);
 	}
 
 	@Override
-	public void login(UserDto userDto) {
-		userRepository.findByName(userDto.)
+	public LoginResponseDto login(UserDto userDto) {
+		// TODO 예외 처리
+		UserEntity user = userRepository.findByName(userDto.getName())
+				.orElseThrow(() -> new RuntimeException("data not found"));
+
+		if(!user.getPassword().equals(userDto.getPassword())) {
+			// TODO 예외 처리
+			throw new RuntimeException("password not match");
+		}
+
+		List<ServiceDto> serviceList = userRepository.findUserServiceById(user.getId());
+
+		return new LoginResponseDto(user.getId(), serviceList);
+	}
+
+	public void information(Long userId, Long serviceId) {
+		List<PermissionGroupDto> permissionGroupList = userRepository.findUserPermissionById(userId, serviceId);
+
+		List<Long> permissionIdList = new ArrayList<>();
+		for(PermissionGroupDto permissionGroup : permissionGroupList) {
+			permissionIdList.add(permissionGroup.getId());
+		}
+
+		//
+		List<PageDto> pageList = pageService.getPageListByPermissionId(permissionIdList);
+		List<FunctionDto> functionList = functionService.getFunctionListByPermission(permissionIdList);
+
+
 	}
 }

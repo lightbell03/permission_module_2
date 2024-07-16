@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class OrganizationController {
 	private final OrganizationService organizationService;
 
-	// TODO 조직 생성 기능은 is_super 만 사용가능 -> api 는 권한과 연결되어 있으면 안되는가
+	// 외부 서비스 혹은 조직을 관리하는 새로운 어드민 페이지
 	@PostMapping("/organizations")
 	public ResponseEntity<Void> createOrganization(
 		@RequestBody CreateOrganizationDto createOrganizationDto) {

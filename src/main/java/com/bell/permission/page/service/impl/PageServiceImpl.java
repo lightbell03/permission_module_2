@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class PageServiceImpl implements PageService {
 	private final PageRepository pageRepository;
 
+	@Override
 	public List<PageDto> getPageListByPermissionId(List<Long> permissionIdList) {
 		return pageRepository.getPageListByPermissionIdList(permissionIdList);
 	}
