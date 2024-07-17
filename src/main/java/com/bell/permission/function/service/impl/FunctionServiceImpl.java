@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class FunctionServiceImpl implements FunctionService {
     private final FunctionRepository functionRepository;
 
-    public List<FunctionDto> getFunctionListByPermission(List<Long> permissionIdList) {
-        return functionRepository.getFunctionListByPermissionIdList(permissionIdList);
+    public List<FunctionDto> getFunctionListByPermission(List<Long> permissionIdList, Long serviceId) {
+        return functionRepository.getFunctionListByPermissionIdList(permissionIdList, serviceId);
     }
 }

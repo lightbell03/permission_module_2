@@ -21,7 +21,7 @@ public class PageRepositoryCustomImpl implements PageRepositoryCustom {
 	private final JPAQueryFactory query;
 
 	@Override
-	public List<PageDto> getPageListByPermissionIdList(List<Long> permissionIdList) {
+	public List<PageDto> getPageListByPermissionIdList(List<Long> permissionIdList, Long serviceId) {
 		return query.selectDistinct(Projections.constructor(PageDto.class,
 				pageEntity.id,
 				pageEntity.path))
@@ -30,7 +30,8 @@ public class PageRepositoryCustomImpl implements PageRepositoryCustom {
 			.on(pagePermissionGroupEntity.pk.pageId.eq(pageEntity.id))
 			.innerJoin(permissionGroupEntity)
 			.on(permissionGroupEntity.id.eq(pagePermissionGroupEntity.pk.permissionGroupId))
-			.where(permissionGroupEntity.id.in(permissionIdList))
+			.where(permissionGroupEntity.id.in(permissionIdList)
+				.and(permissionGroupEntity.serviceId.eq(serviceId)))
 			.fetch();
 	}
 }

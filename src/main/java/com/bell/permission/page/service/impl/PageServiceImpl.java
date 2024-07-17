@@ -16,7 +16,7 @@ public class PageServiceImpl implements PageService {
 	private final PageRepository pageRepository;
 
 	@Override
-	public List<PageDto> getPageListByPermissionId(List<Long> permissionIdList) {
-		return pageRepository.getPageListByPermissionIdList(permissionIdList);
+	public List<PageDto> getPageListByPermissionId(List<Long> permissionIdList, Long serviceId) {
+		return pageRepository.getPageListByPermissionIdList(permissionIdList, serviceId);
 	}
 }

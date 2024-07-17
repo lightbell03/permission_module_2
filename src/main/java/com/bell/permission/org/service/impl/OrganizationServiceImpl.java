@@ -1,5 +1,7 @@
 package com.bell.permission.org.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +26,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Override
 	public OrganizationDto getOrganization(String name) {
 		return organizationRepository.getOrganizationByName(name);
+	}
+
+	@Override
+	public List<OrganizationDto> getAllOrganization() {
+		return organizationRepository.getAllOrganizationList();
 	}
 }

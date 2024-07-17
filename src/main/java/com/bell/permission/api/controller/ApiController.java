@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApiController {
 
-	// TODO api 목록 조회, is_super admin 만 조회 가능하며 권한 연결이 되면 안된다.??
+	// TODO 슈퍼 계정 (ROLE_SUPER)
 	@GetMapping("/apis")
 	private ResponseEntity<Void> getApiList() {
 
 		return null;
 	}
+
+
 }

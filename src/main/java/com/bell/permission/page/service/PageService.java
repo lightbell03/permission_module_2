@@ -4,5 +4,5 @@ import com.bell.permission.page.dto.PageDto;
 import java.util.List;
 
 public interface PageService {
-    List<PageDto> getPageListByPermissionId(List<Long> permissionIdList);
+    List<PageDto> getPageListByPermissionId(List<Long> permissionIdList, Long serviceId);
 }

@@ -1,11 +1,14 @@
 package com.bell.permission.service.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bell.permission.permissiongroup.dto.PermissionGroupDto;
 import com.bell.permission.permissiongroup.service.PermissionGroupService;
 import com.bell.permission.service.dto.CreateServiceDto;
+import com.bell.permission.service.dto.ServiceDto;
 import com.bell.permission.service.entity.ServiceEntity;
 import com.bell.permission.service.repository.ServiceRepository;
 import com.bell.permission.service.service.ServiceService;
@@ -23,6 +26,17 @@ public class ServiceServiceImpl implements ServiceService {
 
 	private final UserService userService;
 	private final PermissionGroupService permissionGroupService;
+
+	// TODO 확인
+	@Override
+	public List<ServiceDto> getServiceListByOrg(Long orgId) {
+		return serviceRepository.findServiceListByOrgId(orgId);
+	}
+
+	@Override
+	public List<ServiceDto> getServiceListByOrg(List<Long> orgIdList) {
+		return serviceRepository.findServiceListByOrgIdList(orgIdList);
+	}
 
 	void createService(CreateServiceDto createServiceDto) {
 		ServiceEntity serviceEntity = ServiceEntity.builder()

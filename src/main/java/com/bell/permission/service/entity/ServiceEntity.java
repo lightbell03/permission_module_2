@@ -26,6 +26,9 @@ public class ServiceEntity {
 	@Column(unique = true)
 	private String name;
 
+	@Column(name = "organization_id")
+	private Long orgId;
+
 	@Builder
 	public ServiceEntity(String name) {
 		this.name = name;

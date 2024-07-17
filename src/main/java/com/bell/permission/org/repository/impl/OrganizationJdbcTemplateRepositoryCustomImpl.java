@@ -1,5 +1,9 @@
 package com.bell.permission.org.repository.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.aspectj.weaver.ast.Or;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -169,5 +173,21 @@ public class OrganizationJdbcTemplateRepositoryCustomImpl implements Organizatio
 			String orgName = resultSet.getString("name");
 			return new OrganizationDto(id, orgName);
 		}, name);
+	}
+
+	@Override
+	public List<OrganizationDto> getAllOrganizationList() {
+		String query = "select organization_id as id, name as name "
+			+ "from common.organization ";
+
+		return jdbcTemplate.queryForObject(query, (resultSet, rowNum) -> {
+			List<OrganizationDto> result = new ArrayList<>();
+			for(int i=0; i<rowNum; i++) {
+				long id = resultSet.getLong("id");
+				String orgName = resultSet.getString("name");
+				result.add(new OrganizationDto(id, orgName));
+			}
+			return result;
+		});
 	}
 }

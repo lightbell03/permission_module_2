@@ -2,10 +2,14 @@ package com.bell.permission.user.service.impl;
 
 import com.bell.permission.function.dto.FunctionDto;
 import com.bell.permission.function.service.FunctionService;
+import com.bell.permission.menu.dto.MenuDto;
+import com.bell.permission.menu.service.MenuService;
+import com.bell.permission.menu.service.impl.MenuServiceImpl;
 import com.bell.permission.page.dto.PageDto;
 import com.bell.permission.page.service.PageService;
 import com.bell.permission.permissiongroup.service.PermissionGroupService;
 import com.bell.permission.service.dto.ServiceDto;
+import com.bell.permission.user.dto.Accessable;
 import com.bell.permission.user.dto.LoginResponseDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +35,9 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final UserPermissionGroupRepository userPermissionGroupRepository;
 
-	private final PermissionGroupService permissionGroupService;
 	private final FunctionService functionService;
 	private final PageService pageService;
+	private final MenuService menuService;
 
 	@Override
 	public void createUser(CreateUserDto createUserDto) {
@@ -75,7 +79,8 @@ public class UserServiceImpl implements UserService {
 		return new LoginResponseDto(user.getId(), serviceList);
 	}
 
-	public void information(Long userId, Long serviceId) {
+	@Override
+	public Accessable information(Long userId, Long serviceId) {
 		List<PermissionGroupDto> permissionGroupList = userRepository.findUserPermissionById(userId, serviceId);
 
 		List<Long> permissionIdList = new ArrayList<>();
@@ -83,10 +88,12 @@ public class UserServiceImpl implements UserService {
 			permissionIdList.add(permissionGroup.getId());
 		}
 
-		//
-		List<PageDto> pageList = pageService.getPageListByPermissionId(permissionIdList);
-		List<FunctionDto> functionList = functionService.getFunctionListByPermission(permissionIdList);
 
+		// TODO serviceId
+		List<PageDto> pageList = pageService.getPageListByPermissionId(permissionIdList, serviceId);
+		List<FunctionDto> functionList = functionService.getFunctionListByPermission(permissionIdList, serviceId);
+		List<MenuDto> menuList = menuService.getMenuListByPermission(permissionIdList, serviceId);
 
+		return new Accessable(pageList, functionList, menuList);
 	}
 }

@@ -22,7 +22,7 @@ public class FunctionRepositoryCustomImpl implements FunctionRepositoryCustom {
 	private final JPAQueryFactory query;
 
 	@Override
-	public List<FunctionDto> getFunctionListByPermissionIdList(List<Long> permissionIdList) {
+	public List<FunctionDto> getFunctionListByPermissionIdList(List<Long> permissionIdList, Long serviceId) {
 		return query.selectDistinct(Projections.constructor(FunctionDto.class,
 				functionEntity.id,
 				apiEntity.path,
@@ -31,7 +31,8 @@ public class FunctionRepositoryCustomImpl implements FunctionRepositoryCustom {
 			.innerJoin(functionPermissionGroupEntity).on(functionPermissionGroupEntity.pk.permissionGroupId.eq(permissionGroupEntity.id))
 			.innerJoin(functionEntity).on(functionEntity.id.eq(functionPermissionGroupEntity.pk.functionId))
 			.leftJoin(apiEntity).on(functionEntity.apiId.eq(apiEntity.id))
-			.where(permissionGroupEntity.id.in(permissionIdList))
+			.where(permissionGroupEntity.id.in(permissionIdList)
+				.and(permissionGroupEntity.serviceId.eq(serviceId )))
 			.fetch();
 	}
 }

@@ -1,5 +1,9 @@
 package com.bell.permission.permissiongroup.service.impl;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import com.bell.permission.permissiongroup.dto.CreatePermissionGroupDto;
@@ -24,7 +28,13 @@ public class PermissionGroupServiceImpl implements PermissionGroupService {
 		permissionGroupRepository.save(permissionGroupEntity);
 	}
 
+	@Override
 	public PermissionGroupDto getPermissionGroup(String permissionName, Long serviceId) {
 		return permissionGroupRepository.findPermissionGroupByName(permissionName, serviceId);
+	}
+
+	@Override
+	public List<PermissionGroupDto> getPermissionGroup(Set<String> permissionNameSet, Long serviceId) {
+		return permissionGroupRepository.findPermissionGroupByName(permissionNameSet, serviceId);
 	}
 }
