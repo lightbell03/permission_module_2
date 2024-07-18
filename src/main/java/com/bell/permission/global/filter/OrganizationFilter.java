@@ -37,7 +37,6 @@ public class OrganizationFilter implements Filter {
 			((HttpServletResponse)response).sendError(404);
 		}
 
-
 		OrganizationContextHolder.setOrganization(new OrganizationInfo(organization.getId(), organization.getName()));
 
 		chain.doFilter(request, response);

@@ -38,7 +38,7 @@ public class AuthorizationFilter implements Filter {
 		String pathInfo = httpRequest.getPathInfo();
 		log.info(pathInfo);
 		Set<String> userRoleSet = getUserPermission(httpRequest);
-		// TODO ROLE_SUPER 권한 사용자의 경우 무조건 통과
+		// TODO ROLE_SUPER 권한 사용자의 경우 무조건 통과 -> is_super
 		if(userRoleSet.contains(ROLE_SUPER)) {
 			chain.doFilter(request, response);
 		} else {
@@ -49,6 +49,9 @@ public class AuthorizationFilter implements Filter {
 			// 	return;
 			// }
 
+			// !TODO 확인 필요
+			Object path = httpRequest.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+			// apiService.isAccessableApiOfPermission();
 			// TODO 유저 저장 어떻게 할지
 			UserContextHolder.set(1L);
 

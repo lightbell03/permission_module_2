@@ -20,15 +20,16 @@ public class ApiTree {
 		// 가장 처음 '/' 는 제거
 		String removedFirstSlashPath = path.substring(1);
 		String[] paths = removedFirstSlashPath.split(SLASH);
-		if(paths[0].equals(node.getPath())) {
-			if(paths.length == 1) {
-				// 다음 노드가 없고 매칭이 된 경우
-				return node;
+
+		ApiNode childApiNode = node.getChildApiNode(paths[0]);
+
+		if(childApiNode != null) {
+			// 말단까지 일치한 경우
+			if (paths.length == 1) {
+				return childApiNode;
 			} else {
-				// 다음 노드가 있는 경우
-				ApiNode nextNode = node.getChildApiNode(paths[1]);
-				String nextPath = removedFirstSlashPath.substring(paths[0].length() + 1);
-				return getChildApiNode(nextNode, nextPath);
+				String nextPath = removedFirstSlashPath.substring(paths[0].length());
+				return getChildApiNode(childApiNode, nextPath);
 			}
 		}
 
@@ -36,15 +37,35 @@ public class ApiTree {
 	}
 
 	public void addApiPermission(String path, String method, String permission) {
-		ApiNode currentApiNode = getChildApiNode(path);
+		addApiPermission(root, path, method, permission);
+	}
 
-		// TODO path 수정
-		String[] splits = path.split(SLASH);
-		String terminalPath = splits[splits.length - 1];
+	private void addApiPermission(ApiNode node, String path, String method, String permission) {
+		String removedFirstSlashPath = path.substring(1);
+		String[] paths = removedFirstSlashPath.split(SLASH);
 
-		ApiNode apiNode = new ApiNode(terminalPath);
-		apiNode.addPermission(method, permission);
-
-		currentApiNode.addChildApiNode(apiNode);
+		ApiNode childApiNode = node.getChildApiNode(paths[0]);
+		// api 가 없다면
+		if(childApiNode == null) {
+			ApiNode nextNode = new ApiNode(paths[0]);
+			node.addChildApiNode(nextNode);
+			// 말단인 경우
+			if(paths.length == 1) {
+				nextNode.addPermission(method,permission);
+			} else {
+				// 말단이 아닌 경우 child 가 없으므로 child 추가 후 다음 노드로 이동
+				String nextPath = removedFirstSlashPath.substring(paths[0].length());
+				addApiPermission(nextNode, nextPath, method, permission);
+			}
+		} else {
+			// childNode 가 말단인 경우
+			if(paths.length == 1) {
+				childApiNode.addPermission(method, permission);
+			} else {
+				// childNode 가 있는데 말단이 아닌 경우
+				String nextPath = removedFirstSlashPath.substring(paths[0].length());
+				addApiPermission(childApiNode, nextPath, method, permission);
+			}
+		}
 	}
 }

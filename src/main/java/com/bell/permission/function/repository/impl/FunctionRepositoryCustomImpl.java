@@ -23,6 +23,7 @@ public class FunctionRepositoryCustomImpl implements FunctionRepositoryCustom {
 
 	@Override
 	public List<FunctionDto> getFunctionListByPermissionIdList(List<Long> permissionIdList, Long serviceId) {
+		// null 인 것만 + distinct 확인
 		return query.selectDistinct(Projections.constructor(FunctionDto.class,
 				functionEntity.id,
 				apiEntity.path,
@@ -32,7 +33,8 @@ public class FunctionRepositoryCustomImpl implements FunctionRepositoryCustom {
 			.innerJoin(functionEntity).on(functionEntity.id.eq(functionPermissionGroupEntity.pk.functionId))
 			.leftJoin(apiEntity).on(functionEntity.apiId.eq(apiEntity.id))
 			.where(permissionGroupEntity.id.in(permissionIdList)
-				.and(permissionGroupEntity.serviceId.eq(serviceId )))
+				.and(permissionGroupEntity.serviceId.eq(serviceId))
+				.and(functionEntity.keyword.isNotNull()))
 			.fetch();
 	}
 }

@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new RuntimeException("data not found"));
 
 		if(!user.getPassword().equals(userDto.getPassword())) {
-			// TODO 예외 처리
 			throw new RuntimeException("password not match");
 		}
 
@@ -88,10 +87,10 @@ public class UserServiceImpl implements UserService {
 			permissionIdList.add(permissionGroup.getId());
 		}
 
-
 		// TODO serviceId
 		List<PageDto> pageList = pageService.getPageListByPermissionId(permissionIdList, serviceId);
 		List<FunctionDto> functionList = functionService.getFunctionListByPermission(permissionIdList, serviceId);
+		// fe 단에서
 		List<MenuDto> menuList = menuService.getMenuListByPermission(permissionIdList, serviceId);
 
 		return new Accessable(pageList, functionList, menuList);

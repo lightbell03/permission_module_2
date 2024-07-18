@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class MenuServiceImpl implements MenuService {
-	private final String MENU_PATH_SEPERATOR = ".";
+	private final String MENU_PATH_SEPERATOR = "."; //.1.2.3.
 	private final MenuRepository menuRepository;
 
 	public List<MenuDto> getMenuListByPermission(List<Long> permissionIdList, Long serviceId) {

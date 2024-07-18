@@ -22,12 +22,6 @@ public class ApiTreeService {
 		this.permissionGroupService = permissionGroupService;
 	}
 
-	public void initOrgApiTree(Long orgId, Long serviceId, String permission, List<ApiDto> apiList) {
-		for(ApiDto api : apiList) {
-			organizationStore.addOrgServiceApiPermission(orgId, serviceId, api.getPath(), api.getMethod(), permission);
-		}
-	}
-
 	public List<PermissionGroupDto> getApiPermissionNameList(Long orgId, Long serviceId, String path, String method) {
 		Map<String, Set<String>> apiMethodsPermission = organizationStore.getOrgServiceApiPermission(orgId, serviceId, path);
 
